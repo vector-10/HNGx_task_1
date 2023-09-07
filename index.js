@@ -5,6 +5,17 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json());
 
+// Function to format a date in the desired format
+function formatDateToCustomISO(date) {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+}
+
 app.get("/api", (req, res) => {
   const { track, slack_name } = req.query;
 
@@ -18,7 +29,7 @@ app.get("/api", (req, res) => {
     weekday: "long",
   });
   // get current utc time
-  const currentUtc = new Date().toISOString();
+  const currentUtc = formatDateToCustomISO(new Date());
 
   //validation for ( -2/+2 ) time zone
   const utcDifferenceHours = new Date().getTimezoneOffset() / 60;
@@ -45,6 +56,9 @@ app.get("/api", (req, res) => {
     status_code: 200,
   });
 });
+
+const currentUtc = formatDateToCustomISO(new Date());
+console.log(currentUtc);
 
 const PORT = 2000 || process.env.PORT;
 app.listen(PORT, () => console.log(`server is listening on PORT ${PORT}`));
