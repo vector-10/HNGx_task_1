@@ -18,7 +18,7 @@ app.get("/api", (req, res) => {
     weekday: "long",
   });
   // get current utc time
-  const currentUtc = new Date().toUTCString();
+  const currentUtc = new Date().toISOString();
 
   //validation for ( -2/+2 ) time zone
   const utcDifferenceHours = new Date().getTimezoneOffset() / 60;
